@@ -1,0 +1,94 @@
+<%- include('../../partials/header') %>
+
+<div class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-user"></i> Détails de l'auteur</h1>
+        <div class="header-actions">
+            <a href="/auteurs/<%= auteur.id %>/modifier" class="btn btn-secondary">
+                <i class="fas fa-edit"></i> Modifier
+            </a>
+            <a href="/auteurs" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="details-container">
+    <div class="details-card">
+        <div class="details-header">
+            <div class="details-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="details-title">
+                <h2><%= auteur.prenom %> <%= auteur.nom %></h2>
+                <% if (auteur.nationalite) { %>
+                    <p class="details-nationalite">
+                        <i class="fas fa-flag"></i> <%= auteur.nationalite %>
+                    </p>
+                <% } %>
+            </div>
+        </div>
+        
+        <div class="details-info">
+            <% if (auteur.date_naissance) { 
+                var dateNaissance = new Date(auteur.date_naissance).toLocaleDateString();
+            %>
+                <div class="info-item">
+                    <span class="info-label">Date de naissance :</span>
+                    <span class="info-value"><%= dateNaissance %></span>
+                </div>
+            <% } %>
+            
+            <% if (auteur.biographie) { %>
+                <div class="info-item">
+                    <span class="info-label">Biographie :</span>
+                    <div class="info-value bio-text"><%= auteur.biographie %></div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    
+    <div class="related-section">
+        <div class="section-header">
+            <h3><i class="fas fa-book"></i> Livres de cet auteur</h3>
+            <a href="/livres/ajouter" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Ajouter un livre
+            </a>
+        </div>
+        
+        <% if (livres && livres.length > 0) { %>
+            <div class="livres-grid">
+                <% for(var i = 0; i < livres.length; i++) { 
+                    var livre = livres[i];
+                %>
+                    <div class="livre-card">
+                        <div class="livre-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="livre-info">
+                            <h4><%= livre.titre %></h4>
+                            <p><%= livre.annee_publication %> • <%= livre.genre || 'Non classé' %></p>
+                            <span class="status-badge <%= livre.disponible ? 'status-available' : 'status-unavailable' %>">
+                                <%= livre.disponible ? 'Disponible' : 'Indisponible' %>
+                            </span>
+                        </div>
+                        <div class="livre-actions">
+                            <a href="/livres/<%= livre.id %>" class="btn-icon" title="Voir détails">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        <% } else { %>
+            <div class="empty-state small">
+                <i class="fas fa-book"></i>
+                <p>Aucun livre associé à cet auteur.</p>
+                <a href="/livres/ajouter" class="btn btn-primary btn-sm">Ajouter un livre</a>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>

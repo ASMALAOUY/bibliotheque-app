@@ -1,0 +1,52 @@
+<%- include('../../partials/header') %>
+
+<div class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-user-edit"></i> Modifier l'auteur</h1>
+        <a href="/auteurs" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+        </a>
+    </div>
+</div>
+
+<div class="form-container">
+    <form action="/auteurs/<%= auteur.id %>/modifier" method="POST" class="form">
+        <div class="form-group">
+            <label for="nom">Nom *</label>
+            <input type="text" id="nom" name="nom" value="<%= auteur.nom %>" required class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="prenom">Prénom *</label>
+            <input type="text" id="prenom" name="prenom" value="<%= auteur.prenom %>" required class="form-control">
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="date_naissance">Date de naissance</label>
+                <input type="date" id="date_naissance" name="date_naissance" 
+                       value="<%= auteur.date_naissance ? new Date(auteur.date_naissance).toISOString().split('T')[0] : '' %>" 
+                       class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label for="nationalite">Nationalité</label>
+                <input type="text" id="nationalite" name="nationalite" value="<%= auteur.nationalite || '' %>" class="form-control">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="biographie">Biographie</label>
+            <textarea id="biographie" name="biographie" rows="5" class="form-control"><%= auteur.biographie || '' %></textarea>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Mettre à jour
+            </button>
+            <a href="/auteurs/<%= auteur.id %>" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+</div>
+
+<%- include('../../partials/footer') %>

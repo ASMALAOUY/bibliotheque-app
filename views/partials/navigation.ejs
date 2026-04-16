@@ -1,0 +1,240 @@
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <a href="/">
+                <i class="fas fa-book-open"></i>
+                <span>Bibliothèque</span>
+            </a>
+        </div>
+        
+        <button class="nav-toggle" id="navToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <div class="nav-menu" id="navMenu">
+            <ul class="nav-links">
+                <li><a href="/" class="<%= title === 'Accueil - Bibliothèque' ? 'active' : '' %>">
+                    <i class="fas fa-home"></i> Accueil
+                </a></li>
+                <li><a href="/livres" class="<%= title && title.includes('Livres') ? 'active' : '' %>">
+                    <i class="fas fa-book"></i> Livres
+                </a></li>
+                <li><a href="/auteurs" class="<%= title && title.includes('Auteurs') ? 'active' : '' %>">
+                    <i class="fas fa-users"></i> Auteurs
+                </a></li>
+            </ul>
+            
+            <form class="search-form" action="/recherche" method="GET">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" 
+                           name="q" 
+                           placeholder="Rechercher un livre ou un auteur..." 
+                           value="<%= typeof searchTerm !== 'undefined' ? searchTerm : '' %>"
+                           autocomplete="off">
+                    <button type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .navbar {
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    
+    .nav-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 70px;
+    }
+    
+    .nav-brand a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        font-size: 1.3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    .nav-brand i {
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    .nav-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #667eea;
+    }
+    
+    .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+    }
+    
+    .nav-links {
+        display: flex;
+        gap: 24px;
+        list-style: none;
+    }
+    
+    .nav-links a {
+        text-decoration: none;
+        color: #4a5568;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        padding: 8px 16px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .nav-links a:hover {
+        color: #667eea;
+        background: #f7fafc;
+    }
+    
+    .nav-links a.active {
+        color: #667eea;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    }
+    
+    .search-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        color: #a0aec0;
+        font-size: 0.85rem;
+    }
+    
+    .search-wrapper input {
+        padding: 10px 80px 10px 35px;
+        border: 1px solid #e2e8f0;
+        border-radius: 50px;
+        width: 280px;
+        transition: all 0.3s ease;
+        font-size: 0.85rem;
+    }
+    
+    .search-wrapper input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        width: 320px;
+    }
+    
+    .search-wrapper button {
+        position: absolute;
+        right: 5px;
+        padding: 5px 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+    }
+    
+    .search-wrapper button:hover {
+        transform: scale(1.05);
+    }
+    
+    @media (max-width: 768px) {
+        .nav-toggle {
+            display: block;
+        }
+        
+        .nav-menu {
+            display: none;
+            position: absolute;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: white;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .nav-menu.active {
+            display: flex;
+        }
+        
+        .nav-links {
+            flex-direction: column;
+            width: 100%;
+            gap: 12px;
+        }
+        
+        .nav-links a {
+            justify-content: center;
+        }
+        
+        .search-form {
+            width: 100%;
+            margin-top: 16px;
+        }
+        
+        .search-wrapper {
+            width: 100%;
+        }
+        
+        .search-wrapper input {
+            width: 100%;
+        }
+        
+        .search-wrapper input:focus {
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+    
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Fermer le menu quand on clique sur un lien
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+    }
+</script>

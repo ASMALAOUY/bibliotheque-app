@@ -1,0 +1,238 @@
+<%- include('../partials/header') %>
+
+<div class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-search"></i> Résultats de recherche</h1>
+    </div>
+</div>
+
+<% if (searchTerm && searchTerm !== '') { %>
+    <div class="search-summary">
+        <div class="search-summary-content">
+            <i class="fas fa-search"></i>
+            <div>
+                <h3>Recherche : "<%= searchTerm %>"</h3>
+                <p><%= totalResults %> résultat(s) trouvé(s)</p>
+            </div>
+        </div>
+    </div>
+<% } %>
+
+<% if (message) { %>
+    <div class="empty-state">
+        <i class="fas fa-search"></i>
+        <h3><%= message %></h3>
+        <p>Essayez avec d'autres mots-clés ou parcourez notre catalogue.</p>
+        <div class="empty-state-actions">
+            <a href="/livres" class="btn btn-primary">
+                <i class="fas fa-book"></i> Voir tous les livres
+            </a>
+            <a href="/auteurs" class="btn btn-secondary">
+                <i class="fas fa-users"></i> Voir tous les auteurs
+            </a>
+        </div>
+    </div>
+<% } else { %>
+    
+    <% if (livres && livres.length > 0) { %>
+        <div class="search-section">
+            <div class="section-header">
+                <h2><i class="fas fa-book"></i> Livres (<%= livres.length %>)</h2>
+            </div>
+            <div class="livres-grid">
+                <% for(var i = 0; i < livres.length; i++) { 
+                    var livre = livres[i];
+                %>
+                    <div class="livre-card">
+                        <div class="livre-cover">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="livre-details">
+                            <h3><%= livre.titre %></h3>
+                            <p class="livre-auteur">
+                                <i class="fas fa-user"></i> 
+                                <%= livre.auteur_prenom %> <%= livre.auteur_nom %>
+                            </p>
+                            <div class="livre-meta">
+                                <% if (livre.annee_publication) { %>
+                                    <span class="meta-item">
+                                        <i class="fas fa-calendar"></i> <%= livre.annee_publication %>
+                                    </span>
+                                <% } %>
+                                <% if (livre.genre) { %>
+                                    <span class="meta-item">
+                                        <i class="fas fa-tag"></i> <%= livre.genre %>
+                                    </span>
+                                <% } %>
+                                <span class="status-badge <%= livre.disponible ? 'status-available' : 'status-unavailable' %>">
+                                    <%= livre.disponible ? 'Disponible' : 'Indisponible' %>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="livre-actions">
+                            <a href="/livres/<%= livre.id %>" class="btn-icon" title="Voir détails">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    <% } %>
+    
+    <% if (auteurs && auteurs.length > 0) { %>
+        <div class="search-section">
+            <div class="section-header">
+                <h2><i class="fas fa-users"></i> Auteurs (<%= auteurs.length %>)</h2>
+            </div>
+            <div class="auteurs-grid">
+                <% for(var i = 0; i < auteurs.length; i++) { 
+                    var auteur = auteurs[i];
+                %>
+                    <div class="auteur-card">
+                        <div class="auteur-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="auteur-info">
+                            <h3><%= auteur.prenom %> <%= auteur.nom %></h3>
+                            <% if (auteur.nationalite) { %>
+                                <p class="auteur-nationalite">
+                                    <i class="fas fa-flag"></i> <%= auteur.nationalite %>
+                                </p>
+                            <% } %>
+                            <% if (auteur.date_naissance) { 
+                                var dateNaiss = new Date(auteur.date_naissance).toLocaleDateString();
+                            %>
+                                <p class="auteur-birth">
+                                    <i class="fas fa-calendar-alt"></i> 
+                                    Né(e) le <%= dateNaiss %>
+                                </p>
+                            <% } %>
+                        </div>
+                        <div class="auteur-actions">
+                            <a href="/auteurs/<%= auteur.id %>" class="btn-icon" title="Voir détails">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    <% } %>
+    
+    <% if (livres.length === 0 && auteurs.length === 0) { %>
+        <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <h3>Aucun résultat trouvé</h3>
+            <p>Aucun livre ou auteur ne correspond à "<strong><%= searchTerm %></strong>"</p>
+            <p>Suggestions :</p>
+            <ul class="suggestions-list">
+                <li>Vérifiez l'orthographe des mots-clés</li>
+                <li>Essayez avec des mots-clés plus généraux</li>
+                <li>Utilisez des mots-clés différents</li>
+            </ul>
+            <div class="empty-state-actions">
+                <a href="/livres" class="btn btn-primary">
+                    <i class="fas fa-book"></i> Parcourir tous les livres
+                </a>
+                <a href="/auteurs" class="btn btn-secondary">
+                    <i class="fas fa-users"></i> Parcourir tous les auteurs
+                </a>
+            </div>
+        </div>
+    <% } %>
+    
+<% } %>
+
+<style>
+    .search-summary {
+        background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
+        border-radius: var(--border-radius);
+        padding: 30px;
+        margin-bottom: 40px;
+        color: white;
+    }
+    
+    .search-summary-content {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .search-summary-content i {
+        font-size: 3rem;
+    }
+    
+    .search-summary-content h3 {
+        margin: 0 0 5px 0;
+        font-size: 1.5rem;
+    }
+    
+    .search-summary-content p {
+        margin: 0;
+        opacity: 0.9;
+    }
+    
+    .search-section {
+        margin-bottom: 50px;
+    }
+    
+    .section-header {
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--gray-200);
+    }
+    
+    .section-header h2 {
+        font-size: 1.5rem;
+        color: var(--gray-800);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .suggestions-list {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0;
+        display: inline-block;
+        text-align: left;
+    }
+    
+    .suggestions-list li {
+        padding: 8px 0;
+        color: var(--gray-600);
+    }
+    
+    .suggestions-list li:before {
+        content: "•";
+        color: var(--primary-color);
+        font-weight: bold;
+        display: inline-block;
+        width: 20px;
+    }
+    
+    .empty-state-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    @media (max-width: 768px) {
+        .search-summary-content {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .empty-state-actions {
+            flex-direction: column;
+        }
+        
+        .suggestions-list {
+            text-align: center;
+        }
+    }
+</style>
+
+<%- include('../partials/footer') %>

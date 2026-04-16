@@ -1,0 +1,251 @@
+<%- include('../../partials/header') %>
+
+<div class="page-header">
+    <div class="page-header-content">
+        <h1>
+            <i class="fas fa-book"></i>
+            Liste des livres
+        </h1>
+        <a href="/livres/ajouter" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter un livre
+        </a>
+    </div>
+</div>
+
+<div class="livres-container">
+    <% if (livres && livres.length > 0) { %>
+        <div class="livres-grid">
+            <% for(var i = 0; i < livres.length; i++) { 
+                var livre = livres[i];
+            %>
+                <div class="livre-card">
+                    <div class="livre-card-header">
+                        <div class="livre-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="livre-title">
+                            <h3><%= livre.titre %></h3>
+                            <p>par <strong><%= livre.auteur_prenom %> <%= livre.auteur_nom %></strong></p>
+                        </div>
+                        <div class="livre-status">
+                            <span class="badge <%= livre.disponible ? 'badge-success' : 'badge-danger' %>">
+                                <%= livre.disponible ? 'Disponible' : 'Indisponible' %>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="livre-card-body">
+                        <div class="info-row">
+                            <i class="fas fa-calendar-alt"></i>
+                            <strong>Année :</strong>
+                            <span><%= livre.annee_publication || 'Non spécifiée' %></span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-tag"></i>
+                            <strong>Genre :</strong>
+                            <span><%= livre.genre || 'Non spécifié' %></span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-barcode"></i>
+                            <strong>ISBN :</strong>
+                            <span><%= livre.isbn || 'Non spécifié' %></span>
+                        </div>
+                        <div class="info-row resume-row">
+                            <i class="fas fa-align-left"></i>
+                            <strong>Résumé :</strong>
+                            <span><%= livre.resume ? (livre.resume.length > 100 ? livre.resume.substring(0, 100) + '...' : livre.resume) : 'Aucun résumé' %></span>
+                        </div>
+                    </div>
+                    
+                    <div class="livre-card-footer">
+                        <a href="/livres/<%= livre.id %>" class="btn-view">
+                            <i class="fas fa-eye"></i> Voir détails
+                        </a>
+                        <a href="/livres/<%= livre.id %>/modifier" class="btn-edit">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                        <form action="/livres/<%= livre.id %>/supprimer" method="POST" class="delete-form">
+                            <button type="submit" class="btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else { %>
+        <div class="empty-state">
+            <i class="fas fa-book"></i>
+            <h3>Aucun livre</h3>
+            <p>Commencez par ajouter votre premier livre.</p>
+            <a href="/livres/ajouter" class="btn btn-primary">Ajouter un livre</a>
+        </div>
+    <% } %>
+</div>
+
+<style>
+    .livres-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .livres-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
+    }
+    
+    .livre-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+    
+    .livre-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .livre-card-header {
+        background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+        padding: 20px;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        position: relative;
+    }
+    
+    .livre-icon {
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .livre-icon i {
+        font-size: 24px;
+    }
+    
+    .livre-title {
+        flex: 1;
+    }
+    
+    .livre-title h3 {
+        margin: 0 0 5px 0;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+    
+    .livre-title p {
+        margin: 0;
+        font-size: 0.8rem;
+        opacity: 0.9;
+    }
+    
+    .badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+    
+    .badge-success {
+        background: #10b981;
+        color: white;
+    }
+    
+    .badge-danger {
+        background: #ef4444;
+        color: white;
+    }
+    
+    .livre-card-body {
+        padding: 20px;
+        background: #f8f9fa;
+    }
+    
+    .info-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px solid #e9ecef;
+        font-size: 0.85rem;
+    }
+    
+    .info-row:last-child {
+        border-bottom: none;
+    }
+    
+    .info-row i {
+        width: 18px;
+        color: #f59e0b;
+        margin-top: 2px;
+    }
+    
+    .info-row strong {
+        color: #495057;
+        min-width: 55px;
+        font-weight: 600;
+    }
+    
+    .info-row span {
+        color: #6c757d;
+        flex: 1;
+    }
+    
+    .resume-row {
+        flex-wrap: wrap;
+    }
+    
+    .resume-row span {
+        width: calc(100% - 85px);
+    }
+    
+    .livre-card-footer {
+        padding: 15px 20px;
+        background: white;
+        display: flex;
+        gap: 10px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    @media (max-width: 768px) {
+        .livres-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .livre-card-header {
+            flex-wrap: wrap;
+        }
+        
+        .livre-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        
+        .info-row {
+            flex-wrap: wrap;
+        }
+        
+        .info-row strong {
+            min-width: 100%;
+        }
+        
+        .resume-row span {
+            width: 100%;
+            margin-left: 30px;
+        }
+    }
+</style>
+
+<%- include('../../partials/footer') %>

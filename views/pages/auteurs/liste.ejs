@@ -1,0 +1,259 @@
+<%- include('../../partials/header') %>
+
+<div class="page-header">
+    <div class="page-header-content">
+        <h1>
+            <i class="fas fa-users"></i>
+            Liste des auteurs
+        </h1>
+        <a href="/auteurs/ajouter" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter un auteur
+        </a>
+    </div>
+</div>
+
+<div class="auteurs-container">
+    <% if (auteurs && auteurs.length > 0) { %>
+        <div class="auteurs-grid">
+            <% for(var i = 0; i < auteurs.length; i++) { 
+                var auteur = auteurs[i];
+            %>
+                <div class="auteur-card">
+                    <div class="auteur-card-header">
+                        <div class="auteur-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="auteur-title">
+                            <h3><%= auteur.prenom %> <%= auteur.nom %></h3>
+                            <% if (auteur.nationalite) { %>
+                                <p><i class="fas fa-flag"></i> <%= auteur.nationalite %></p>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <div class="auteur-card-body">
+                        <% if (auteur.date_naissance) { 
+                            var dateNaiss = new Date(auteur.date_naissance).toLocaleDateString('fr-FR');
+                        %>
+                            <div class="info-row">
+                                <i class="fas fa-calendar-alt"></i>
+                                <strong>Né(e) le :</strong>
+                                <span><%= dateNaiss %></span>
+                            </div>
+                        <% } %>
+                        <div class="info-row bio-row">
+                            <i class="fas fa-align-left"></i>
+                            <strong>Biographie :</strong>
+                            <span><%= auteur.biographie ? (auteur.biographie.length > 100 ? auteur.biographie.substring(0, 100) + '...' : auteur.biographie) : 'Aucune biographie' %></span>
+                        </div>
+                    </div>
+                    
+                    <div class="auteur-card-footer">
+                        <a href="/auteurs/<%= auteur.id %>" class="btn-view">
+                            <i class="fas fa-eye"></i> Voir détails
+                        </a>
+                        <a href="/auteurs/<%= auteur.id %>/modifier" class="btn-edit">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                        <form action="/auteurs/<%= auteur.id %>/supprimer" method="POST" class="delete-form">
+                            <button type="submit" class="btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet auteur ?')">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else { %>
+        <div class="empty-state">
+            <i class="fas fa-users"></i>
+            <h3>Aucun auteur</h3>
+            <p>Commencez par ajouter votre premier auteur.</p>
+            <a href="/auteurs/ajouter" class="btn btn-primary">Ajouter un auteur</a>
+        </div>
+    <% } %>
+</div>
+
+<style>
+    .auteurs-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .auteurs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
+    }
+    
+    .auteur-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+    
+    .auteur-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .auteur-card-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .auteur-avatar i {
+        font-size: 55px;
+        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+    }
+    
+    .auteur-title h3 {
+        margin: 0 0 5px 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    
+    .auteur-title p {
+        margin: 0;
+        font-size: 0.85rem;
+        opacity: 0.9;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .auteur-card-body {
+        padding: 20px;
+        background: #f8f9fa;
+        min-height: 120px;
+    }
+    
+    .info-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px solid #e9ecef;
+        font-size: 0.85rem;
+    }
+    
+    .info-row:last-child {
+        border-bottom: none;
+    }
+    
+    .info-row i {
+        width: 18px;
+        color: #667eea;
+        margin-top: 2px;
+    }
+    
+    .info-row strong {
+        color: #495057;
+        min-width: 85px;
+        font-weight: 600;
+    }
+    
+    .info-row span {
+        color: #6c757d;
+        flex: 1;
+    }
+    
+    .bio-row {
+        flex-wrap: wrap;
+    }
+    
+    .bio-row span {
+        width: calc(100% - 115px);
+    }
+    
+    .auteur-card-footer {
+        padding: 15px 20px;
+        background: white;
+        display: flex;
+        gap: 10px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .btn-view, .btn-edit, .btn-delete {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+    }
+    
+    .btn-view {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+    
+    .btn-view:hover {
+        background: #bbdef5;
+        transform: translateY(-2px);
+    }
+    
+    .btn-edit {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+    
+    .btn-edit:hover {
+        background: #ffe0b2;
+        transform: translateY(-2px);
+    }
+    
+    .btn-delete {
+        background: #ffebee;
+        color: #d32f2f;
+    }
+    
+    .btn-delete:hover {
+        background: #ffcdd2;
+        transform: translateY(-2px);
+    }
+    
+    .delete-form {
+        flex: 1;
+    }
+    
+    .delete-form button {
+        width: 100%;
+    }
+    
+    @media (max-width: 768px) {
+        .auteurs-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .info-row {
+            flex-wrap: wrap;
+        }
+        
+        .info-row strong {
+            min-width: 100%;
+        }
+        
+        .bio-row span {
+            width: 100%;
+            margin-left: 30px;
+        }
+    }
+</style>
+
+<%- include('../../partials/footer') %>

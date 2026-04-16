@@ -1,0 +1,81 @@
+<%- include('../../partials/header') %>
+
+<div class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-book"></i> Détails du livre</h1>
+        <div class="header-actions">
+            <a href="/livres/<%= livre.id %>/modifier" class="btn btn-secondary">
+                <i class="fas fa-edit"></i> Modifier
+            </a>
+            <a href="/livres" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="details-container">
+    <div class="details-card">
+        <div class="details-header">
+            <div class="details-avatar">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <div class="details-title">
+                <h2><%= livre.titre %></h2>
+                <p class="details-subtitle">
+                    Par <%= livre.auteur_prenom %> <%= livre.auteur_nom %>
+                </p>
+            </div>
+        </div>
+        
+        <div class="details-info">
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Année de publication :</span>
+                    <span class="info-value"><%= livre.annee_publication || 'Non spécifiée' %></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Genre :</span>
+                    <span class="info-value"><%= livre.genre || 'Non spécifié' %></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">ISBN :</span>
+                    <span class="info-value"><%= livre.isbn || 'Non spécifié' %></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Statut :</span>
+                    <span class="status-badge <%= livre.disponible ? 'status-available' : 'status-unavailable' %>">
+                        <%= livre.disponible ? 'Disponible' : 'Indisponible' %>
+                    </span>
+                </div>
+            </div>
+            
+            <% if (livre.resume) { %>
+                <div class="info-item">
+                    <span class="info-label">Résumé :</span>
+                    <div class="info-value resume-text"><%= livre.resume %></div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    
+    <div class="related-section">
+        <div class="section-header">
+            <h3><i class="fas fa-user"></i> Informations sur l'auteur</h3>
+            <a href="/auteurs/<%= livre.auteur_id %>" class="btn btn-secondary btn-sm">
+                Voir le profil de l'auteur
+            </a>
+        </div>
+        <div class="auteur-mini-card">
+            <div class="auteur-mini-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="auteur-mini-info">
+                <h4><%= livre.auteur_prenom %> <%= livre.auteur_nom %></h4>
+                <a href="/auteurs/<%= livre.auteur_id %>" class="link">Voir tous ses livres →</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %>
